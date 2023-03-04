@@ -1,4 +1,5 @@
 from fastapi import FastAPI, Request, Depends, Form, status
+from fastapi.staticfiles import StaticFiles
 from fastapi.responses import RedirectResponse
 from fastapi.templating import Jinja2Templates
 
@@ -10,6 +11,7 @@ from db_model import Todo
 templates = Jinja2Templates(directory='templates')
 
 app = FastAPI()
+app.mount("/static", StaticFiles(directory="static"), name="static")
 
 async def get_data():
     async with async_session() as db:
@@ -34,15 +36,6 @@ async def add(request: Request, title: str = Form(...), db: AsyncSession = Depen
 
     url = app.url_path_for("home")
     return RedirectResponse(url=url, status_code=status.HTTP_303_SEE_OTHER)
-
-@app.get("/update/{todo_id}")
-async def update(request: Request, todo_id: int, db: AsyncSession = Depends(get_data)):
-    todo = await db.get(Todo, todo_id)
-    todo.complete = not todo.complete
-    await db.commit()
-
-    url = app.url_path_for("home")
-    return RedirectResponse(url=url, status_code=status.HTTP_302_FOUND)
 
 @app.get("/delete/{todo_id}")
 async def delete(request: Request, todo_id: int, db: AsyncSession = Depends(get_data)):
