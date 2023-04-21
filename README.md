@@ -1,5 +1,6 @@
 # Productivity Dashboard
 FastAPI web app.
+
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ![](https://github.com/twangles/productivity-dashboard/blob/main/extra/screenshot-edit.png?raw=true)
